@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HONEY BADGER v0.1 — Proof</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    html, body {
+        height: 100%;
+    }
+    body {
+        background: #0a0a0a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+    }
+    .card {
+        width: 1200px;
+        height: 630px;
+        min-width: 1200px;
+        min-height: 630px;
+        background: #0a0a0a;
+        color: #ffb000;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 40px 60px;
+        isolation: isolate;
+    }
+    .card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at center, rgba(255,176,0,0.07) 0%, transparent 65%);
+        pointer-events: none;
+        z-index: 0;
+    }
+    .card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(0,0,0,0.22) 0px,
+            rgba(0,0,0,0.22) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+        opacity: 0.5;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .title {
+        position: relative;
+        z-index: 1;
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-align: center;
+        margin-bottom: 48px;
+        color: #ffb000;
+        text-shadow: 
+            0 0 6px rgba(255,176,0,0.8),
+            0 0 20px rgba(255,176,0,0.35),
+            0 0 40px rgba(255,176,0,0.15);
+        text-transform: uppercase;
+    }
+    .box {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1050px;
+        border: 2px solid #ffb000;
+        background: rgba(255,176,0,0.02);
+        padding: 30px 38px;
+        box-shadow:
+            inset 0 0 0 1px rgba(255,176,0,0.08),
+            inset 0 0 30px rgba(255,176,0,0.05),
+            0 0 25px rgba(255,176,0,0.08);
+    }
+    .row {
+        display: flex;
+        font-size: 21px;
+        line-height: 1.95;
+        letter-spacing: 0.2px;
+        text-shadow: 0 0 5px rgba(255,176,0,0.5);
+    }
+    .label {
+        width: 190px;
+        flex-shrink: 0;
+        opacity: 0.7;
+        text-transform: none;
+    }
+    .value {
+        flex: 1;
+        word-break: break-all;
+        font-weight: 500;
+    }
+    .footer {
+        position: relative;
+        z-index: 1;
+        margin-top: 52px;
+        font-size: 22px;
+        line-height: 1.5;
+        text-align: center;
+        letter-spacing: 0.3px;
+        color: #ffb000;
+        opacity: 0.92;
+        text-shadow: 
+            0 0 6px rgba(255,176,0,0.6),
+            0 0 18px rgba(255,176,0,0.25);
+        max-width: 950px;
+    }
+    @media (max-width: 1240px) {
+        body {
+            padding: 20px;
+        }
+        .card {
+            transform-origin: top center;
+            scale: 0.8;
+        }
+    }
+    @media (max-width: 980px) {
+        .card { scale: 0.65; }
+    }
+    @media (max-width: 780px) {
+        .card { scale: 0.5; }
+    }
+</style>
+</head>
+<body>
+    <main class="card" role="img" aria-label="HONEY BADGER v0.1 proof card">
+        <h1 class="title">HONEY BADGER v0.1 — ↑↑↓↓←→←→ B A</h1>
+        
+        <div class="box">
+            <div class="row">
+                <span class="label">First author:</span>
+                <span class="value">David Wise (DAVID)</span>
+            </div>
+            <div class="row">
+                <span class="label">Root:</span>
+                <span class="value">6DD8EE2539B1EF4B966F71671D229C5D2F7D65AE87D7827F0B85C6AF07FB58BF</span>
+            </div>
+            <div class="row">
+                <span class="label">Time:</span>
+                <span class="value">2026-05-08 10:17:30 CDT</span>
+            </div>
+            <div class="row">
+                <span class="label">Pixel:</span>
+                <span class="value">1</span>
+            </div>
+        </div>
+
+        <p class="footer">3 around 1, fused by gravity. Substrate invariant. Infinite. Omnipresent.</p>
+    </main>
+</body>
+</html>
