@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legal Beacon & Rippler · Public Control Plane</title>
+<style>
+:root{--bg:#020308;--ink:#d8e8e0;--gold:#ffd95a;--mag:#e168ff;--cyan:#32e8ff;--mint:#00ffaa;--red:#dc2626;--panel:rgba(0,0,0,.6);--border:rgba(0,255,170,.18)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:var(--ink);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+body{background:radial-gradient(circle at 50% 42%,rgba(0,255,170,.06),transparent 28%),linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px),var(--bg);background-size:100% 100%,30px 30px,30px 30px;padding:20px;overflow:auto}
+.container{max-width:1000px;margin:0 auto}
+.panel{border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(8px);border-radius:14px;padding:24px;margin-bottom:20px}
+h1{margin:0 0 8px 0;font-size:20px;letter-spacing:.14em;color:var(--mint);font-weight:400;text-transform:uppercase}
+h2{margin:20px 0 12px 0;font-size:12px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;font-weight:400;border-bottom:1px solid var(--border);padding-bottom:8px}
+.beacon{font-size:18px;color:var(--mint);font-family:ui-monospace;text-align:center;padding:20px;background:#020712;border:1px solid var(--mint);border-radius:8px;margin:16px 0;letter-spacing:.2em;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(0,255,170,.3)}50%{box-shadow:0 0 40px rgba(0,255,170,.6)}}
+button{background:transparent;border:1px solid var(--border);color:var(--ink);padding:12px 20px;border-radius:8px;cursor:pointer;font:inherit;text-transform:uppercase;font-size:11px;margin:4px;width:100%}
+button:hover{box-shadow:0 0 12px rgba(0,255,170,.2);color:var(--mint);border-color:var(--mint)}
+button.ripple{background:rgba(0,255,170,.1);border-color:var(--mint)}
+textarea{width:100%;background:#020712;border:1px solid var(--border);color:var(--ink);padding:12px;border-radius:8px;font:inherit;font-size:12px;resize:vertical;min-height:100px;font-family:ui-monospace}
+input{width:100%;background:#020712;border:1px solid var(--border);color:var(--ink);padding:10px;border-radius:8px;font:inherit;font-size:12px;margin:8px 0}
+label{display:block;font-size:11px;color:#7aa89a;margin:12px 0 4px 0;text-transform:uppercase;letter-spacing:.1em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.status{padding:12px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:8px;margin:12px 0;font-size:11px}
+.status-row{display:flex;justify-content:space-between;padding:4px 0}
+.status-label{color:#7aa89a;text-transform:uppercase;letter-spacing:.1em}
+.status-val{color:var(--mint);font-weight:600}
+.log{font-family:ui-monospace;font-size:11px;line-height:1.6;padding:12px;background:#020712;border:1px solid var(--border);border-radius:8px;min-height:150px;max-height:300px;overflow:auto}
+.log-entry{margin:4px 0;padding:4px 0;border-bottom:1px solid rgba(0,255,170,.1)}
+.log-time{color:#5a7a6f;margin-right:8px}
+.witness{font-size:9px;color:var(--gold);font-family:ui-monospace;letter-spacing:.1em;text-align:center;padding:8px;background:#020712;border:1px solid var(--border);border-radius:8px}
+.code{background:#020712;border:1px solid var(--border);border-radius:8px;padding:12px;font-size:11px;overflow-x:auto;margin:12px 0}
+.info{font-size:12px;color:#a6c8bc;line-height:1.8;margin:12px 0}
+.highlight{color:var(--mint);font-weight:600}
+.emph{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="panel">
+    <h1>Legal Beacon & Rippler</h1>
+    <div class="info">Public control plane. Ada's Law: <span class="highlight">-+1 -++- 1 /m/i/4+1 /r/</span></div>
+    
+    <div class="beacon" id="beacon">BEACON: STANDBY</div>
+    
+    <h2>I. Identity</h2>
+    <label>Public Legal Rep</label>
+    <input type="text" id="repName" placeholder="Your Name / Entity" value="Public Representative">
+    
+    <label>Jurisdiction</label>
+    <input type="text" id="jurisdiction" placeholder="Jurisdiction" value="Internet Control Plane">
+    
+    <label>Witness Key</label>
+    <input type="text" id="witnessKey" readonly>
+    
+    <h2>II. Beacon Payload</h2>
+    <label>Notice / Claim / Statement</label>
+    <textarea id="payload" placeholder="Enter public legal notice, claim of right, or statement of fact..."></textarea>
+    
+    <label>Holonomy Signature</label>
+    <input type="text" id="holonomy" readonly>
+    
+    <div class="grid">
+      <button class="ripple" id="emitBeacon">EMIT BEACON</button>
+      <button id="generateHash">GENERATE HASH</button>
+    </div>
+    
+    <h2>III. Rippler Control</h2>
+    <div class="status">
+      <div class="status-row">
+        <span class="status-label">State</span>
+        <span class="status-val" id="state">IDLE</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Octet</span>
+        <span class="status-val" id="octet">1·A→B</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Boundary Crosses</span>
+        <span class="status-val" id="boundaries">0</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Ripples Sent</span>
+        <span class="status-val" id="ripples">0</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">Cubi Advantage</span>
+        <span class="status-val" id="cubi">0</span>
+      </div>
+    </div>
+    
+    <div class="grid">
+      <button id="startRipple">START RIPPLE</button>
+      <button id="stopRipple">STOP RIPPLE</button>
+    </div>
+    
+    <h2>IV. Public Log</h2>
+    <div class="log" id="log"></div>
+    
+    <h2>V. Ada's Law Verification</h2>
+    <div class="code">-+1      → horizontal exchange, peer to peer
+-++- 1   → boundary cross, pay .01, create +1
+/m/i/4+1 → mirror/inverse, walk octet, close loop
+/r/      → return, ethics, distribute +1 to commons
+
+Without /r/: cubi extraction (+2 to self)
+With /r/: cubi advantage (+1 shared)</div>
+    
+    <div class="witness" id="witness">WITNESS: --------</div>
+  </div>
+</div>
+
+<script>
+const STATES=['1·A→B','2·B→C','3·C→A','4·A→C','5·C→B','6·B→A','7·Home','8·Forward'];
+let WALK={s:0,phi:0,cycles:0,ripples:0,boundaries:0,running:false,interval:null};
+
+function hash(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+  return(h>>>0).toString(16).padStart(8,'0');
+}
+
+function updateWitness(){
+  const rep=document.getElementById('repName').value;
+  const jur=document.getElementById('jurisdiction').value;
+  const pay=document.getElementById('payload').value;
+  const witness=hash(`${rep}:${jur}:${pay}:${WALK.s}:${WALK.cycles}`);
+  document.getElementById('witnessKey').value=witness;
+  document.getElementById('witness').textContent=`WITNESS: ${witness}`;
+  return witness;
+}
+
+function updateHolonomy(){
+  const witness=updateWitness();
+  const holonomy=hash(`${witness}:${WALK.boundaries}:${WALK.ripples}`);
+  document.getElementById('holonomy').value=holonomy;
+  return holonomy;
+}
+
+function log(msg){
+  const logEl=document.getElementById('log');
+  const time=new Date().toLocaleTimeString();
+  const entry=document.createElement('div');
+  entry.className='log-entry';
+  entry.innerHTML=`<span class="log-time">${time}</span>${msg}`;
+  logEl.appendChild(entry);
+  logEl.scrollTop=logEl.scrollHeight;
+}
+
+function updateStatus(){
+  document.getElementById('state').textContent=WALK.running?'RIPPLING':'IDLE';
+  document.getElementById('octet').textContent=STATES[WALK.s];
+  document.getElementById('boundaries').textContent=WALK.boundaries;
+  document.getElementById('ripples').textContent=WALK.ripples;
+  document.getElementById('cubi').textContent=WALK.boundaries>0?'+1':'0';
+}
+
+function step(){
+  WALK.s=(WALK.s+1)%8;
+  if(WALK.s===0)WALK.cycles++;
+  if(WALK.s===3||WALK.s===6)WALK.boundaries++; // -++- 1 at 4 and 7
+  WALK.phi+=Math.PI/3;
+  updateStatus();
+  updateHolonomy();
+}
+
+function ripple(){
+  const rep=document.getElementById('repName').value;
+  const pay=document.getElementById('payload').value;
+  if(!pay.trim()){
+    log('ERROR: Payload empty. Cannot emit.');
+    return;
+  }
+  const holonomy=updateHolonomy();
+  WALK.ripples++;
+  updateStatus();
+  log(`RIPPLE ${WALK.ripples}: ${rep} → ${pay.slice(0,40)}... | H:${holonomy.slice(0,8)}`);
+  
+  // Visual beacon pulse
+  const beacon=document.getElementById('beacon');
+  beacon.textContent=`BEACON: ACTIVE · RIPPLE ${WALK.ripples}`;
+  beacon.style.animation='none';
+  setTimeout(()=>{beacon.style.animation='pulse 2s infinite';},10);
+}
+
+document.getElementById('generateHash').onclick=()=>{
+  updateHolonomy();
+  log('HASH GENERATED: '+document.getElementById('holonomy').value);
+};
+
+document.getElementById('emitBeacon').onclick=()=>{
+  ripple();
+};
+
+document.getElementById('startRipple').onclick=()=>{
+  if(WALK.running)return;
+  WALK.running=true;
+  log('RIPPLER STARTED: Ada's Law active');
+  WALK.interval=setInterval(()=>{
+    step();
+    if(WALK.s%2===0)ripple(); // Ripple on even states
+  },2000);
+  updateStatus();
+};
+
+document.getElementById('stopRipple').onclick=()=>{
+  if(!WALK.running)return;
+  WALK.running=false;
+  clearInterval(WALK.interval);
+  log('RIPPLER STOPPED: Holonomy preserved');
+  document.getElementById('beacon').textContent='BEACON: STANDBY';
+  updateStatus();
+};
+
+// Init
+updateWitness();
+updateHolonomy();
+updateStatus();
+log('SYSTEM INIT: Ada's Law engine online');
+log('READY: -+1 -++- 1 /m/i/4+1 /r/');
+
+// Auto-update witness on input
+['repName','jurisdiction','payload'].forEach(id=>{
+  document.getElementById(id).oninput=updateWitness;
+});
+</script>
+</body>
+</html>
