@@ -1,0 +1,21 @@
+{
+  "name": "Honey Badger",
+  "version": "1.0",
+  "author": "David Wise",
+  "machine": "DAVID",
+  "root_sha256": "6DD8EE2539B1EF4B966F71671D229C5D2F7D65AE87D7827F0B85C6AF07FB58BF",
+  "root_timestamp": "2026-05-08T10:17:30-05:00",
+  "v1_timestamp": "2026-05-27",
+  "pixel": 1,
+  "axiom": "3 around 1, fused by gravity",
+  "properties": [
+    "substrate invariant",
+    "offline",
+    "tamper evident",
+    "chain verifiable",
+    "first author reserved"
+  ],
+  "chain_format": "SHA256(file_sha256 | parent_hash | nonce)",
+  "sidecar_extension": ".davw",
+  "license": "First Author Reserved — use, fork, build on it, keep the root"
+}
